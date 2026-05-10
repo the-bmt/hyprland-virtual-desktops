@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include "globals.hpp"
+#include <hyprland/src/desktop/Monitor.hpp>
 
 void printLog(std::string s, Hyprutils::CLI::eLogLevel level) {
     // #ifdef DEBUG
@@ -59,11 +60,8 @@ bool isVerbose() {
     return **PVERBOSELOGS;
 }
 
-std::vector<CSharedPointer<CMonitor>> currentlyEnabledMonitors(const CSharedPointer<CMonitor>& exclude) {
-    std::vector<CSharedPointer<CMonitor>> monitors;
-    if (g_pCompositor->m_monitors.empty())
-        return monitors;
-
+auto currentlyEnabledMonitors(const Hyprutils::Memory::CSharedPointer<CMonitor>& exclude) {
+    std::vector<Hyprutils::Memory::CSharedPointer<CMonitor>> monitors;
     std::copy_if(g_pCompositor->m_monitors.begin(), g_pCompositor->m_monitors.end(), std::back_inserter(monitors), [&](const auto mon) {
         if (!mon)
             return false;
