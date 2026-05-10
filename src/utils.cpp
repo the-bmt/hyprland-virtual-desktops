@@ -60,26 +60,29 @@ bool isVerbose() {
     return **PVERBOSELOGS;
 }
 
-auto currentlyEnabledMonitors(const Hyprutils::Memory::CSharedPointer<CMonitor>& exclude) {
+std::vector<Hyprutils::Memory::CSharedPointer<CMonitor>> currentlyEnabledMonitors(const Hyprutils::Memory::CSharedPointer<CMonitor>& exclude) {
     std::vector<Hyprutils::Memory::CSharedPointer<CMonitor>> monitors;
-    std::copy_if(g_pCompositor->m_monitors.begin(), g_pCompositor->m_monitors.end(), std::back_inserter(monitors), [&](const auto mon) {
+    
+    for (auto& mon : g_pCompositor->m_monitors) {
         if (!mon)
-            return false;
+            continue;
 
         if (g_pCompositor->m_unsafeOutput && g_pCompositor->m_unsafeOutput->m_name == mon->m_name)
-            return false;
+            continue;
 
         if (!mon->m_output)
-            return false;
+            continue;
 
         if (mon->m_output->name == std::string("HEADLESS-1"))
-            return false;
+            continue;
 
         if (mon == exclude)
-            return false;
+            continue;
 
-        return mon->m_enabled;
-    });
+        if (mon->m_enabled)
+            monitors.push_back(mon);
+    }
+    
     return monitors;
 }
 
