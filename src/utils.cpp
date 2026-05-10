@@ -1,6 +1,6 @@
 #include "utils.hpp"
 #include "globals.hpp"
-#include <hyprland/src/desktop/Monitor.hpp>
+#include <hyprland/src/helpers/Monitor.hpp>
 
 void printLog(std::string s, Hyprutils::CLI::eLogLevel level) {
     // #ifdef DEBUG
